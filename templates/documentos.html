@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestão de Documentos | Prestolabor</title>
+  <link rel="stylesheet" href="..//static/css/documentos.css">
+</head>
+
+<body>
+
+  <header class="topbar">
+    <a href="{{ url_for('inicio') }}" class="brand">
+      <span class="brand-mark">P</span>
+      <span>
+        <strong>PRESTOLABOR</strong>
+        <small>SAÚDE E SEGURANÇA NO TRABALHO</small>
+      </span>
+    </a>
+    <a href="{{ url_for('inicio') }}" class="back-link">← Voltar ao painel</a>
+  </header>
+
+  <main class="page-container">
+
+    <section class="page-heading">
+      <div>
+        <span class="eyebrow">GESTÃO SST</span>
+        <h1>Controle de documentos</h1>
+        <p>Acompanhe vencimentos e organize a preparação documental das empresas.</p>
+      </div>
+      <div class="heading-icon">▤</div>
+    </section>
+
+    <section class="month-panel">
+      <div class="month-info">
+        <span class="section-kicker">PERÍODO DE CONSULTA</span>
+        <h2>{{ nome_mes }} <span>{{ ano }}</span></h2>
+        <p>Documentos com preparação prevista para este mês.</p>
+      </div>
+
+      <nav class="month-navigation" aria-label="Navegação mensal">
+        {% if mes == 1 %}
+        <a class="nav-button" href="{{ url_for('documentos', mes=12, ano=ano-1) }}">← Anterior</a>
+        {% else %}
+        <a class="nav-button" href="{{ url_for('documentos', mes=mes-1, ano=ano) }}">← Anterior</a>
+        {% endif %}
+
+        {% if mes == 12 %}
+        <a class="nav-button nav-button-primary" href="{{ url_for('documentos', mes=1, ano=ano+1) }}">Próximo →</a>
+        {% else %}
+        <a class="nav-button nav-button-primary" href="{{ url_for('documentos', mes=mes+1, ano=ano) }}">Próximo →</a>
+        {% endif %}
+      </nav>
+    </section>
+
+    <section class="summary-grid">
+      <article class="summary-card">
+        <div class="summary-icon icon-blue">▤</div>
+        <div>
+          <span>Empresas no período</span>
+          <strong>{{ documentos|length }}</strong>
+          <small>Com preparação prevista</small>
+        </div>
+      </article>
+
+      <article class="summary-card">
+        <div class="summary-icon icon-amber">◷</div>
+        <div>
+          <span>Período consultado</span>
+          <strong>{{ "%02d"|format(mes) }}/{{ ano }}</strong>
+          <small>Competência selecionada</small>
+        </div>
+      </article>
+    </section>
+
+    <section class="content-section">
+      <div class="section-header">
+        <div>
+          <span class="section-kicker">AGENDA DOCUMENTAL</span>
+          <h2>Preparações previstas</h2>
+        </div>
+        <span class="count-pill">{{ documentos|length }} registro(s)</span>
+      </div>
+
+      {% if documentos %}
+      <div class="document-company-list">
+        {% for documento in documentos %}
+        <article class="company-card">
+          <div class="company-card-top">
+            <div class="company-avatar">{{ documento.nome[:1]|upper }}</div>
+            <div class="company-info">
+              <h3>{{ documento.nome }}</h3>
+              <p>Controle de renovação documental</p>
+            </div>
+            <span class="status-badge">Preparação prevista</span>
+          </div>
+
+          <div class="date-grid">
+            <div class="date-item">
+              <span>Data do documento</span>
+              <strong>
+                {% if documento.data_documento %}
+                {{ documento.data_documento.strftime("%d/%m/%Y") }}
+                {% else %}
+                Não informada
+                {% endif %}
+              </strong>
+            </div>
+            <div class="date-item date-highlight">
+              <span>Início da preparação</span>
+              <strong>{{ documento.data_preparacao.strftime("%d/%m/%Y") }}</strong>
+            </div>
+            <div class="date-item">
+              <span>Vencimento previsto</span>
+              <strong>{{ documento.vencimento.strftime("%d/%m/%Y") }}</strong>
+            </div>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty-state">
+        <div class="empty-icon">✓</div>
+        <h3>Nenhuma preparação prevista</h3>
+        <p>Não há documentos programados para preparação em {{ nome_mes }} de {{ ano }}.</p>
+        <p class="empty-note">Você pode consultar outro mês usando os controles acima.</p>
+      </div>
+      {% endif %}
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <strong>Prestolabor</strong>
+    <span>Saúde e Segurança no Trabalho</span>
+  </footer>
+
+  <script>
+    const listaDocumentos = document.getElementById("lista-documentos");
+    const contadorDocumentos = document.getElementById("contador-documentos");
+
+    function atualizarLista() {
+      const itens = listaDocumentos.querySelectorAll(".document-item");
+
+      itens.forEach((item, indice) => {
+        const numero = String(indice + 1).padStart(2, "0");
+        item.querySelector(".document-number").textContent = numero;
+        item.querySelector(".document-item-title").textContent =
+          item.querySelector(".nome-documento").value.trim() || "Novo documento";
+      });
+
+      const total = itens.length;
+      contadorDocumentos.textContent =
+        `${total} ${total === 1 ? "documento na lista" : "documentos na lista"}`;
+    }
+
+    function adicionarDocumento() {
+      const item = document.createElement("article");
+      item.className = "document-item";
+
+      item.innerHTML = `
+            <div class="document-item-heading">
+                <span class="document-number"></span>
+                <span class="document-item-title">Novo documento</span>
+                <button type="button" class="remove-button" aria-label="Remover documento">Remover</button>
+            </div>
+
+            <div class="document-form-grid">
+                <label class="field field-name">
+                    <span>Nome do documento</span>
+                    <input type="text" class="nome-documento" placeholder="Ex.: PGR, PCMSO, LTCAT">
+                </label>
+
+                <label class="field">
+                    <span>Status</span>
+                    <select class="status-documento">
+                        <option value="nao_iniciado">Não iniciado</option>
+                        <option value="em_andamento">Em andamento</option>
+                        <option value="revisado">Revisado</option>
+                        <option value="enviado">Enviado para assinatura</option>
+                        <option value="disponivel">Disponível</option>
+                        <option value="concluido">Concluído</option>
+                    </select>
+                </label>
+
+                <label class="field field-notes">
+                    <span>Anotações</span>
+                    <textarea class="anotacao-documento" rows="2" placeholder="Pendências, observações ou próximos passos..."></textarea>
+                </label>
+            </div>
+        `;
+
+      item.querySelector(".remove-button").addEventListener("click", function () {
+        removerDocumento(this);
+      });
+
+      item.querySelector(".nome-documento").addEventListener("input", atualizarLista);
+
+      listaDocumentos.appendChild(item);
+      atualizarLista();
+      item.querySelector(".nome-documento").focus();
+    }
+
+    function removerDocumento(botao) {
+      const itens = listaDocumentos.querySelectorAll(".document-item");
+
+      if (itens.length === 1) {
+        const item = itens[0];
+        item.querySelector(".nome-documento").value = "";
+        item.querySelector(".status-documento").value = "nao_iniciado";
+        item.querySelector(".anotacao-documento").value = "";
+      } else {
+        botao.closest(".document-item").remove();
+      }
+
+      atualizarLista();
+    }
+
+    listaDocumentos.addEventListener("input", function (evento) {
+      if (evento.target.classList.contains("nome-documento")) {
+        atualizarLista();
+      }
+    });
+
+    atualizarLista();
+  </script>
+
+</body>
+
+</html>

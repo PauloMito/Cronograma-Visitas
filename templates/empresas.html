@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Empresas | Minha Carteira</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/empresas.css') }}">
+</head>
+
+<body>
+
+  <div class="layout">
+    <main class="main-content companies-page">
+
+      <header class="topbar companies-header">
+        <div>
+          <span class="eyebrow">GESTÃO CADASTRAL</span>
+          <h1>Empresas cadastradas</h1>
+          <p class="page-description">
+            Consulte os dados cadastrais, a assessoria e os prazos de cada empresa.
+          </p>
+        </div>
+
+        <a href="/cadastrar" class="button button-primary">
+          <span>＋</span>
+          Nova empresa
+        </a>
+      </header>
+
+      <!-- Mensagens do Flask -->
+      <div id="mensagens" class="messages">
+        {% with mensagens = get_flashed_messages(with_categories=true) %}
+        {% if mensagens %}
+        {% for categoria, mensagem in mensagens %}
+        <div class="message message-{{ categoria }}">
+          {{ mensagem }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+      </div>
+
+      <!-- Resumo -->
+      <section class="companies-summary">
+        <div class="summary-item">
+          <span class="summary-icon icon-blue">▤</span>
+          <div>
+            <strong>{{ empresas|length }}</strong>
+            <span>Empresas cadastradas</span>
+          </div>
+        </div>
+
+        <div class="summary-divider"></div>
+
+        <div class="summary-description">
+          <strong>Carteira empresarial</strong>
+          <span>Consulte cada cadastro individualmente.</span>
+        </div>
+      </section>
+
+      <!-- Pesquisa -->
+      <section class="company-search">
+        <label for="pesquisa-empresa">Localizar empresa</label>
+
+        <div class="search-input-wrapper">
+          <span class="search-icon">⌕</span>
+          <input type="search" id="pesquisa-empresa" placeholder="Digite o nome, CNPJ, CAEPF ou cidade..."
+            autocomplete="off">
+        </div>
+
+        <span class="search-hint">
+          A pesquisa filtra os registros exibidos na página.
+        </span>
+      </section>
+
+      <!-- Lista -->
+      <section class="company-list">
+
+        {% if empresas %}
+
+        {% for empresa in empresas %}
+
+        <article class="company-card" data-company-card data-search="{{ (
+                (empresa[1] or '') ~ ' ' ~
+                (empresa[2] or '') ~ ' ' ~
+                (empresa[3] or '') ~ ' ' ~
+                (empresa[4] or '') ~ ' ' ~
+                (empresa[5] or '')
+              )|lower }}">
+
+          <!-- Cabeçalho -->
+          <header class="company-card-header">
+            <div class="company-identity">
+
+              <div class="company-avatar">
+                {{ empresa[1][0]|upper if empresa[1] else '?' }}
+              </div>
+
+              <div class="company-title">
+                <span class="company-id">
+                  CADASTRO Nº {{ empresa[0] }}
+                </span>
+
+                <h2>{{ empresa[1] or 'Empresa sem nome' }}</h2>
+
+                <span class="company-cnpj">
+                  {{ empresa[2] or 'Tipo não informado' }}:
+                  {{ empresa[3] or 'Não informado' }}
+                </span>
+              </div>
+            </div>
+
+            <div class="company-header-status">
+              {% if empresa[7] | int == 1 %}
+              <span class="status-badge status-active">
+                <span></span>
+                Com assessoria
+              </span>
+              {% else %}
+              <span class="status-badge status-inactive">
+                <span></span>
+                Sem assessoria
+              </span>
+              {% endif %}
+            </div>
+          </header>
+
+          <!-- Dados cadastrais -->
+          <div class="company-section">
+            <h3 class="company-section-title">
+              <span class="section-marker"></span>
+              Dados cadastrais
+            </h3>
+
+            <div class="company-data-grid">
+
+              <div class="company-field">
+                <span>Razão social / nome</span>
+                <strong>{{ empresa[1] or 'Não informado' }}</strong>
+              </div>
+
+              <div class="company-field">
+                <span>{{ empresa[2] or 'Tipo de inscrição' }}</span>
+                <strong>{{ empresa[3] or 'Não informado' }}</strong>
+              </div>
+
+              <div class="company-field field-full">
+                <span>Endereço</span>
+                <strong>{{ empresa[4] or 'Não informado' }}</strong>
+              </div>
+
+              <div class="company-field">
+                <span>Cidade</span>
+                <strong>{{ empresa[5] or 'Não informada' }}</strong>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Assessoria -->
+          <div class="company-section">
+            <h3 class="company-section-title">
+              <span class="section-marker marker-green"></span>
+              Assessoria e visitas
+            </h3>
+
+            {% if empresa[7] | int == 1 %}
+
+            <div class="company-data-grid">
+
+              <div class="company-field">
+                <span>Situação da assessoria</span>
+                <strong class="assessment-confirmed">
+                  Assessoria contratada
+                </strong>
+              </div>
+
+              <div class="company-field">
+                <span>Periodicidade contratada</span>
+                <strong>
+                  {% if empresa[8] | int == 1 %}
+                  Mensal
+                  {% elif empresa[8] | int == 2 %}
+                  Bimestral
+                  {% elif empresa[8] | int == 3 %}
+                  Trimestral
+                  {% elif empresa[8] | int == 4 %}
+                  Quadrimestral
+                  {% elif empresa[8] | int == 6 %}
+                  Semestral
+                  {% else %}
+                  Não definida
+                  {% endif %}
+                </strong>
+              </div>
+
+              <div class="company-field">
+                <span>Data de início</span>
+                <strong>
+                  {% if empresa[9] %}
+                  {{ empresa[9][8:10] }}/{{ empresa[9][5:7] }}/{{ empresa[9][0:4] }}
+                  {% else %}
+                  Não informada
+                  {% endif %}
+                </strong>
+              </div>
+
+              <div class="company-field">
+                <span>Próxima visita prevista</span>
+                <strong class="date-highlight">
+                  {% if proximas_visitas[empresa[0]] %}
+                  {{ proximas_visitas[empresa[0]].strftime("%d/%m/%Y") }}
+                  {% else %}
+                  Não definida
+                  {% endif %}
+                </strong>
+              </div>
+
+            </div>
+
+            {% else %}
+
+            <div class="no-assessment">
+              <span class="no-assessment-icon">i</span>
+              <div>
+                <strong>Sem assessoria contratada</strong>
+                <p>
+                  Este cadastro não possui assessoria ativa.
+                  Não há periodicidade ou agenda de visitas vinculada.
+                </p>
+              </div>
+            </div>
+
+            {% endif %}
+          </div>
+
+          <!-- Documentos -->
+          <div class="company-section">
+            <h3 class="company-section-title">
+              <span class="section-marker marker-purple"></span>
+              Controle de documentos
+            </h3>
+
+            <div class="company-data-grid">
+
+              <div class="company-field">
+                <span>Data do documento</span>
+                <strong>
+                  {% if datas_documentos[empresa[0]].documento %}
+                  {{ datas_documentos[empresa[0]].documento.strftime("%d/%m/%Y") }}
+                  {% else %}
+                  Não informada
+                  {% endif %}
+                </strong>
+              </div>
+
+              <div class="company-field">
+                <span>Vencimento previsto</span>
+                <strong>
+                  {% if datas_documentos[empresa[0]].vencimento %}
+                  {{ datas_documentos[empresa[0]].vencimento.strftime("%d/%m/%Y") }}
+                  {% else %}
+                  Não definido
+                  {% endif %}
+                </strong>
+              </div>
+
+              <div class="company-field">
+                <span>Data de antecipação</span>
+                <strong class="date-highlight">
+                  {% if datas_documentos[empresa[0]].antecipacao %}
+                  {{ datas_documentos[empresa[0]].antecipacao.strftime("%d/%m/%Y") }}
+                  {% else %}
+                  Não definida
+                  {% endif %}
+                </strong>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Anotações -->
+          <div class="company-notes">
+            <h3>Anotações</h3>
+            <p>
+              {% if empresa[6] %}
+              {{ empresa[6] }}
+              {% else %}
+              Nenhuma anotação registrada para esta empresa.
+              {% endif %}
+            </p>
+          </div>
+
+          <!-- Ações -->
+          <footer class="company-card-footer">
+            <span class="record-reference">
+              Registro #{{ empresa[0] }}
+            </span>
+
+            <div class="company-actions">
+              <a href="/alterar/{{ empresa[0] }}" class="button button-edit">
+                <span>✎</span>
+                Alterar cadastro
+              </a>
+
+              <form action="{{ url_for('deletar', id=empresa[0]) }}" method="POST"
+                onsubmit="return confirm('Deseja realmente excluir esta empresa? Esta ação não poderá ser desfeita.');">
+                <button type="submit" class="button button-delete">
+                  <span>×</span>
+                  Excluir
+                </button>
+              </form>
+
+            </div>
+          </footer>
+
+        </article>
+
+        {% endfor %}
+
+        {% else %}
+
+        <div class="companies-empty">
+          <span class="empty-icon">▤</span>
+          <h2>Nenhuma empresa cadastrada</h2>
+          <p>
+            Sua carteira ainda está vazia.
+            Cadastre a primeira empresa para começar.
+          </p>
+          <a href="/cadastrar" class="button button-primary">
+            <span>＋</span>
+            Cadastrar empresa
+          </a>
+        </div>
+
+        {% endif %}
+
+        <div id="nenhum-resultado" class="companies-empty" hidden>
+          <span class="empty-icon">⌕</span>
+          <h2>Nenhuma empresa encontrada</h2>
+          <p>Não há cadastros correspondentes ao termo pesquisado.</p>
+        </div>
+
+      </section>
+
+      <footer class="footer">
+        Minha Carteira
+        <span>Gestão e organização empresarial</span>
+      </footer>
+
+    </main>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/empresas.js') }}"></script>
+
+</body>
+
+</html>

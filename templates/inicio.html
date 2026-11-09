@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Prestolabor | Painel de Gestão</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/inicio.css') }}">
+</head>
+
+<body>
+
+  <div class="layout">
+
+    <aside class="sidebar">
+
+      <a href="/" class="brand">
+        <span class="brand-icon">♟</span>
+
+        <span class="brand-text">
+          <strong>Prestolabor</strong>
+          <small>Gestão empresarial e SST</small>
+        </span>
+      </a>
+
+      <div class="menu-label">MENU PRINCIPAL</div>
+
+      <nav class="navigation">
+
+        <a href="/" class="nav-link active">
+          <span class="nav-icon">⌂</span>
+          <span>Dashboard</span>
+        </a>
+
+        <a href="/empresas" class="nav-link">
+          <span class="nav-icon">▤</span>
+          <span>Empresas</span>
+        </a>
+
+        <a href="/cadastrar" class="nav-link">
+          <span class="nav-icon">＋</span>
+          <span>Cadastrar empresa</span>
+        </a>
+
+        <a href="/calendario" class="nav-link">
+          <span class="nav-icon">▦</span>
+          <span>Calendário de visitas</span>
+        </a>
+
+        <a href="/documentos" class="nav-link">
+          <span class="nav-icon">▧</span>
+          <span>Documentos</span>
+        </a>
+
+        <a href="{{ url_for('relatorio_empresas') }}" class="nav-link">
+          <span class="nav-icon">▤</span>
+          <span>Relatório de empresas</span>
+        </a>
+
+      </nav>
+
+      <div class="sidebar-footer">
+        <span class="status-dot"></span>
+        Sistema operacional
+      </div>
+
+    </aside>
+
+
+    <main class="main-content">
+
+      <!-- CABEÇALHO -->
+
+      <header class="topbar">
+
+        <div>
+          <span class="eyebrow">VISÃO GERAL</span>
+
+          <h1>Dashboard</h1>
+
+          <p class="page-description">
+            Acompanhe sua carteira empresarial, as visitas previstas
+            e os prazos documentais.
+          </p>
+        </div>
+
+        <a href="/cadastrar" class="button button-primary">
+          <span>＋</span>
+          Nova empresa
+        </a>
+
+      </header>
+
+
+      <!-- MENSAGENS DO FLASK -->
+
+      <div id="mensagens" class="messages">
+
+        {% with mensagens = get_flashed_messages(with_categories=true) %}
+
+        {% if mensagens %}
+
+        {% for categoria, mensagem in mensagens %}
+
+        <div class="message message-{{ categoria }}">
+          <span>{{ mensagem }}</span>
+        </div>
+
+        {% endfor %}
+
+        {% endif %}
+
+        {% endwith %}
+
+      </div>
+
+
+      <!-- INDICADORES DA CARTEIRA -->
+
+      {% set indicadores = namespace(
+      total=0,
+      assessoria=0,
+      documentos=0,
+      visitas=0
+      ) %}
+
+      {% for empresa in empresas %}
+
+      {% set indicadores.total = indicadores.total + 1 %}
+
+      {% if empresa[7] | int == 1 %}
+      {% set indicadores.assessoria = indicadores.assessoria + 1 %}
+      {% endif %}
+
+      {% if datas_documentos[empresa[0]].documento %}
+      {% set indicadores.documentos = indicadores.documentos + 1 %}
+      {% endif %}
+
+      {% if proximas_visitas[empresa[0]] %}
+      {% set indicadores.visitas = indicadores.visitas + 1 %}
+      {% endif %}
+
+      {% endfor %}
+
+
+      <!-- APRESENTAÇÃO -->
+
+      <section class="welcome-card">
+
+        <div class="welcome-content">
+
+          <span class="welcome-label">CENTRAL DE GESTÃO</span>
+
+          <h2>Prestolabor</h2>
+
+          <p>
+            Organize os cadastros das empresas, acompanhe os ciclos de
+            assessoria e mantenha os vencimentos documentais sob controle.
+          </p>
+
+          <a href="/empresas" class="button button-light">
+            Acessar carteira
+            <span>→</span>
+          </a>
+
+        </div>
+
+        <div class="welcome-decoration" aria-hidden="true">
+
+          <div class="decoration-circle circle-one"></div>
+          <div class="decoration-circle circle-two"></div>
+
+          <div class="decoration-card">
+            <span>EMPRESAS CADASTRADAS</span>
+
+            <strong>{{ indicadores.total }}</strong>
+
+            <small>Registros na carteira</small>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- RESUMO -->
+
+      <section class="section">
+
+        <div class="section-heading">
+
+          <div>
+            <h2>Resumo da carteira</h2>
+
+            <p>
+              Indicadores dos registros cadastrados no sistema.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="stats-grid">
+
+          <article class="stat-card">
+
+            <div class="stat-top">
+              <span class="stat-icon icon-blue">▤</span>
+              <span class="stat-label">CADASTROS</span>
+            </div>
+
+            <strong class="stat-value">
+              {{ indicadores.total }}
+            </strong>
+
+            <span class="stat-description">
+              Empresas cadastradas
+            </span>
+
+          </article>
+
+
+          <article class="stat-card">
+
+            <div class="stat-top">
+              <span class="stat-icon icon-green">✓</span>
+              <span class="stat-label">ASSESSORIA(Visita)</span>
+            </div>
+
+            <strong class="stat-value">
+              {{ indicadores.assessoria }}
+            </strong>
+
+            <span class="stat-description">
+              Empresas com assessoria contratada
+            </span>
+
+          </article>
+
+
+          <article class="stat-card">
+
+            <div class="stat-top">
+              <span class="stat-icon icon-orange">▦</span>
+              <span class="stat-label">AGENDA</span>
+            </div>
+
+            <strong class="stat-value">
+              {{ indicadores.visitas }}
+            </strong>
+
+            <span class="stat-description">
+              Empresas com próxima visita calculada
+            </span>
+
+          </article>
+
+
+          <article class="stat-card">
+
+            <div class="stat-top">
+              <span class="stat-icon icon-purple">▧</span>
+              <span class="stat-label">DOCUMENTAÇÃO</span>
+            </div>
+
+            <strong class="stat-value">
+              {{ indicadores.documentos }}
+            </strong>
+
+            <span class="stat-description">
+              Empresas com data de documento registrada
+            </span>
+
+          </article>
+
+        </div>
+
+      </section>
+
+
+      <!-- ACESSO RÁPIDO -->
+
+      <section class="section">
+
+        <div class="section-heading">
+
+          <div>
+            <h2>Acesso rápido</h2>
+
+            <p>
+              Acesse diretamente os módulos de gestão.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="modules-grid">
+
+
+          <!-- CADASTRAR EMPRESA -->
+
+          <a href="/cadastrar" class="module-card">
+
+            <span class="module-icon icon-blue">＋</span>
+
+            <div class="module-info">
+              <h3>Cadastrar empresa</h3>
+
+              <p>
+                Registre uma nova empresa na carteira.
+              </p>
+            </div>
+
+            <span class="module-arrow">↗</span>
+
+          </a>
+
+
+          <!-- EMPRESAS -->
+
+          <a href="/empresas" class="module-card">
+
+            <span class="module-icon icon-green">▤</span>
+
+            <div class="module-info">
+              <h3>Empresas</h3>
+
+              <p>
+                Consulte e gerencie os dados cadastrais.
+              </p>
+            </div>
+
+            <span class="module-arrow">↗</span>
+
+          </a>
+
+
+          <!-- CALENDÁRIO -->
+
+          <a href="/calendario" class="module-card">
+
+            <span class="module-icon icon-orange">▦</span>
+
+            <div class="module-info">
+              <h3>Calendário de visitas</h3>
+
+              <p>
+                Consulte as visitas previstas por mês.
+              </p>
+            </div>
+
+            <span class="module-arrow">↗</span>
+
+          </a>
+
+
+          <!-- DOCUMENTOS -->
+
+          <a href="/documentos" class="module-card">
+
+            <span class="module-icon icon-purple">▧</span>
+
+            <div class="module-info">
+              <h3>Documentos</h3>
+
+              <p>
+                Acompanhe datas de emissão e vencimentos previstos.
+              </p>
+            </div>
+
+            <span class="module-arrow">↗</span>
+
+          </a>
+
+
+          <!-- RELATÓRIO DE EMPRESAS -->
+
+          <a href="{{ url_for('relatorio_empresas') }}" class="module-card">
+
+            <span class="module-icon icon-purple">▤</span>
+
+            <div class="module-info">
+              <h3>Relatório de empresas</h3>
+
+              <p>
+                Consulte todas as empresas cadastradas
+                e suas qualificações.
+              </p>
+            </div>
+
+            <span class="module-arrow">↗</span>
+
+          </a>
+
+
+        </div>
+
+      </section>
+
+
+      <!-- RODAPÉ -->
+
+      <footer class="footer">
+
+        Prestolabor
+
+        <span>Saúde e Segurança no Trabalho</span>
+
+      </footer>
+
+    </main>
+
+  </div>
+
+
+  <script src="{{ url_for('static', filename='js/inicio.js') }}"></script>
+
+</body>
+
+</html>

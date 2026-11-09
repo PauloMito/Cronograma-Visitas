@@ -1,0 +1,502 @@
+
+/* ========================================
+   CONFIGURAÇÕES GERAIS
+======================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --cor-fundo: #f3f5f8;
+    --cor-cartao: #ffffff;
+    --cor-texto: #202938;
+    --cor-secundaria: #687386;
+    --cor-borda: #d8dee8;
+    --cor-principal: #2457a7;
+    --cor-principal-hover: #194582;
+    --cor-destaque: #eaf1fc;
+    --cor-sucesso: #ffffff;
+    --raio: 12px;
+}
+
+body {
+    margin: 0;
+    padding: 36px 24px;
+    background: var(--cor-fundo);
+    color: var(--cor-texto);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+
+/* ========================================
+   ÁREA PRINCIPAL
+======================================== */
+
+.pagina-cadastro {
+    width: 100%;
+    max-width: 1080px;
+    margin: 0 auto;
+}
+
+
+/* ========================================
+   CABEÇALHO
+======================================== */
+
+.cabecalho {
+    margin-bottom: 28px;
+}
+
+.botao-voltar {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 28px;
+    padding: 10px 15px;
+    border: 1px solid var(--cor-borda);
+    border-radius: 8px;
+    background: var(--cor-cartao);
+    color: var(--cor-texto);
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.botao-voltar:hover {
+    background: var(--cor-destaque);
+    border-color: var(--cor-principal);
+}
+
+.botao-voltar span {
+    font-size: 20px;
+}
+
+.titulo-pagina {
+    padding: 8px 0;
+}
+
+.subtitulo {
+    color: var(--cor-principal);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+.titulo-pagina h1 {
+    margin: 8px 0;
+    font-size: clamp(28px, 4vw, 38px);
+    line-height: 1.2;
+    letter-spacing: -0.8px;
+}
+
+.titulo-pagina p {
+    margin: 0;
+    color: var(--cor-secundaria);
+    font-size: 16px;
+}
+
+
+/* ========================================
+   FORMULÁRIO E SEÇÕES
+======================================== */
+
+.formulario {
+    overflow: hidden;
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--raio);
+    background: var(--cor-cartao);
+    box-shadow: 0 8px 30px rgba(30, 45, 70, 0.06);
+}
+
+.secao-formulario {
+    padding: 30px 34px;
+    border-bottom: 1px solid #e8ecf2;
+}
+
+.cabecalho-secao {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 26px;
+}
+
+.numero-secao {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    background: var(--cor-destaque);
+    color: var(--cor-principal);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.cabecalho-secao h2 {
+    margin: 0 0 4px;
+    font-size: 20px;
+    line-height: 1.3;
+}
+
+.cabecalho-secao p {
+    margin: 0;
+    color: var(--cor-secundaria);
+    font-size: 14px;
+}
+
+
+/* ========================================
+   GRADE DOS CAMPOS
+======================================== */
+
+.grade-campos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 22px;
+}
+
+.campo {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.campo-largo {
+    grid-column: 1 / -1;
+}
+
+.campo label {
+    color: var(--cor-texto);
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.campo input,
+.campo select,
+.campo textarea {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    min-height: 54px;
+    padding: 13px 15px;
+    border: 1px solid #cbd3df;
+    border-radius: 8px;
+    outline: none;
+    background: #ffffff;
+    color: var(--cor-texto);
+    font-family: inherit;
+    font-size: 16px;
+    line-height: 1.4;
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s,
+        background 0.2s;
+}
+
+.campo input::placeholder,
+.campo textarea::placeholder {
+    color: #929baa;
+    opacity: 1;
+}
+
+.campo input:hover,
+.campo select:hover,
+.campo textarea:hover {
+    border-color: #9aa8bc;
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
+    border-color: var(--cor-principal);
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(36, 87, 167, 0.12);
+}
+
+.campo textarea {
+    min-height: 140px;
+    resize: vertical;
+}
+
+.campo small {
+    color: var(--cor-secundaria);
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.campo input[type="date"] {
+    cursor: pointer;
+}
+
+.campo select {
+    cursor: pointer;
+}
+
+
+/* ========================================
+   ASSESSORIA
+======================================== */
+
+.secao-assessoria {
+    background: #fcfdff;
+}
+
+.opcao-assessoria {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px;
+    border: 1px solid var(--cor-borda);
+    border-radius: 10px;
+    background: #ffffff;
+    cursor: pointer;
+    transition:
+        border-color 0.2s,
+        background 0.2s;
+}
+
+.opcao-assessoria:hover {
+    border-color: var(--cor-principal);
+    background: #f8faff;
+}
+
+.opcao-assessoria input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+.checkbox-personalizado {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+    border: 2px solid #aab5c5;
+    border-radius: 6px;
+    background: #ffffff;
+}
+
+.opcao-assessoria input:checked + .checkbox-personalizado {
+    border-color: var(--cor-principal);
+    background: var(--cor-principal);
+}
+
+.opcao-assessoria input:checked + .checkbox-personalizado::after {
+    width: 6px;
+    height: 11px;
+    border: solid #ffffff;
+    border-width: 0 2px 2px 0;
+    content: "";
+    transform: rotate(45deg) translate(-1px, -1px);
+}
+
+.opcao-assessoria input:focus-visible + .checkbox-personalizado {
+    outline: 3px solid rgba(36, 87, 167, 0.25);
+    outline-offset: 3px;
+}
+
+.texto-opcao {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.texto-opcao strong {
+    font-size: 15px;
+}
+
+.texto-opcao small {
+    color: var(--cor-secundaria);
+    font-size: 13px;
+}
+
+.campos-assessoria {
+    margin-top: 24px;
+    padding: 22px;
+    border: 1px solid #dbe5f5;
+    border-radius: 10px;
+    background: #f5f8fe;
+}
+
+
+/* ========================================
+   BOTÃO DE CADASTRO
+======================================== */
+
+.acoes-formulario {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 24px 34px;
+    background: #ffffff;
+}
+
+.acoes-formulario p {
+    margin: 0;
+    color: var(--cor-secundaria);
+    font-size: 13px;
+}
+
+.botao-cadastrar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    min-height: 54px;
+    padding: 14px 24px;
+    border: none;
+    border-radius: 8px;
+    background: var(--cor-principal);
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+        background 0.2s,
+        transform 0.2s,
+        box-shadow 0.2s;
+}
+
+.botao-cadastrar:hover {
+    background: var(--cor-principal-hover);
+    box-shadow: 0 5px 14px rgba(36, 87, 167, 0.2);
+}
+
+.botao-cadastrar:active {
+    transform: translateY(1px);
+}
+
+.botao-cadastrar span {
+    font-size: 20px;
+}
+
+
+/* ========================================
+   TELAS MENORES
+======================================== */
+
+@media (max-width: 700px) {
+    body {
+        padding: 20px 12px;
+    }
+
+    .cabecalho {
+        margin-bottom: 20px;
+    }
+
+    .botao-voltar {
+        margin-bottom: 22px;
+    }
+
+    .secao-formulario {
+        padding: 24px 18px;
+    }
+
+    .cabecalho-secao {
+        gap: 12px;
+        margin-bottom: 22px;
+    }
+
+    .cabecalho-secao h2 {
+        font-size: 18px;
+    }
+
+    .grade-campos {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 21px;
+    }
+
+    .campo-largo {
+        grid-column: auto;
+    }
+
+    .campo input,
+    .campo select,
+    .campo textarea {
+        min-height: 54px;
+        font-size: 16px;
+    }
+
+    .campo textarea {
+        min-height: 130px;
+    }
+
+    .campos-assessoria {
+        padding: 18px 14px;
+    }
+
+    .acoes-formulario {
+        align-items: stretch;
+        flex-direction: column;
+        padding: 22px 18px;
+    }
+
+    .botao-cadastrar {
+        width: 100%;
+    }
+}
+
+@media (max-width: 380px) {
+    body {
+        padding: 14px 8px;
+    }
+
+    .secao-formulario {
+        padding: 20px 13px;
+    }
+
+    .numero-secao {
+        width: 36px;
+        height: 36px;
+    }
+
+    .opcao-assessoria {
+        align-items: flex-start;
+        padding: 14px;
+    }
+}
+
+.aviso {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    font-size: 17px;
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+.aviso strong {
+    font-size: 19px;
+    text-transform: uppercase;
+}
+
+.aviso-erro {
+    background-color: #fff0f0;
+    border: 2px solid #d93025;
+    color: #a31515;
+}
+
+.aviso-sucesso {
+    background-color: #eaf7ee;
+    border: 2px solid #258447;
+    color: #176b35;
+}

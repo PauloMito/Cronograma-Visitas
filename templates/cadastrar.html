@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Cadastrar empresa | Rolabor</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/cadastrar.css') }}">
+</head>
+
+<body>
+
+  <main class="pagina-cadastro">
+
+    <header class="cabecalho">
+      <a href="/" class="botao-voltar">
+        <span aria-hidden="true">←</span>
+        Voltar ao início
+      </a>
+
+      <div class="titulo-pagina">
+        <span class="subtitulo">GESTÃO DE CADASTROS</span>
+        <h1>Cadastrar empresa</h1>
+        <p>
+          Preencha os dados para registrar uma nova empresa
+          no sistema.
+        </p>
+      </div>
+    </header>
+
+
+    <form method="POST" class="formulario">
+
+      <!-- AVISOS DO SISTEMA -->
+
+      {% with mensagens = get_flashed_messages(with_categories=true) %}
+      {% if mensagens %}
+      {% for categoria, mensagem in mensagens %}
+      <div class="aviso aviso-{{ categoria }}" role="alert">
+        <strong>
+          {% if categoria == "erro" %}
+          ATENÇÃO!
+          {% elif categoria == "sucesso" %}
+          SUCESSO!
+          {% else %}
+          AVISO!
+          {% endif %}
+        </strong>
+
+        <span>{{ mensagem }}</span>
+      </div>
+      {% endfor %}
+      {% endif %}
+      {% endwith %}
+
+
+      <!-- IDENTIFICAÇÃO -->
+
+      <section class="secao-formulario">
+
+        <div class="cabecalho-secao">
+          <span class="numero-secao">01</span>
+
+          <div>
+            <h2>Identificação</h2>
+            <p>Informações principais da empresa.</p>
+          </div>
+        </div>
+
+        <div class="grade-campos">
+
+          <div class="campo campo-largo">
+            <label for="nome">Nome da empresa *</label>
+
+            <input type="text" id="nome" name="nome" placeholder="Ex.: Empresa Exemplo Ltda."
+              autocomplete="organization" required>
+          </div>
+
+          <div class="campo">
+            <label for="tipo_inscricao">
+              Tipo de inscrição *
+            </label>
+
+            <select id="tipo_inscricao" name="tipo_inscricao" required>
+              <option value="CNPJ">CNPJ</option>
+              <option value="CAEPF">CAEPF</option>
+            </select>
+          </div>
+
+          <div class="campo">
+            <label for="numero_inscricao" id="label_numero_inscricao">
+              Número do CNPJ *
+            </label>
+
+            <input type="text" id="numero_inscricao" name="numero_inscricao" placeholder="00.000.000/0000-00"
+              autocomplete="off" inputmode="numeric" required>
+
+            <small>
+              Informe o número correspondente ao cadastro.
+            </small>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- LOCALIZAÇÃO -->
+
+      <section class="secao-formulario">
+
+        <div class="cabecalho-secao">
+          <span class="numero-secao">02</span>
+
+          <div>
+            <h2>Localização</h2>
+            <p>Onde a empresa está estabelecida.</p>
+          </div>
+        </div>
+
+        <div class="grade-campos">
+
+          <div class="campo campo-largo">
+            <label for="endereco">Endereço</label>
+
+            <input type="text" id="endereco" name="endereco" placeholder="Rua, número, bairro e complemento"
+              autocomplete="street-address">
+          </div>
+
+          <div class="campo campo-largo">
+            <label for="cidade">Cidade</label>
+
+            <input type="text" id="cidade" name="cidade" placeholder="Digite a cidade" autocomplete="address-level2">
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- INFORMAÇÕES COMPLEMENTARES -->
+
+      <section class="secao-formulario">
+
+        <div class="cabecalho-secao">
+          <span class="numero-secao">03</span>
+
+          <div>
+            <h2>Informações complementares</h2>
+            <p>Referências e observações do cadastro.</p>
+          </div>
+        </div>
+
+        <div class="grade-campos">
+
+          <div class="campo campo-largo">
+            <label for="anotacoes">Anotações</label>
+
+            <textarea id="anotacoes" name="anotacoes" rows="5"
+              placeholder="Registre informações relevantes sobre a empresa..."></textarea>
+          </div>
+
+          <div class="campo campo-largo">
+            <label for="data_documento">
+              Data do documento
+            </label>
+
+            <input type="date" id="data_documento" name="data_documento">
+
+            <small>
+              Utilize a data de referência do documento.
+            </small>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ASSESSORIA -->
+
+      <section class="secao-formulario secao-assessoria">
+
+        <div class="cabecalho-secao">
+          <span class="numero-secao">04</span>
+
+          <div>
+            <h2>Assessoria de SST</h2>
+            <p>Configure o acompanhamento periódico.</p>
+          </div>
+        </div>
+
+        <label for="possui_assessoria" class="opcao-assessoria">
+
+          <input type="checkbox" id="possui_assessoria" name="possui_assessoria" value="1">
+
+          <span class="checkbox-personalizado"></span>
+
+          <span class="texto-opcao">
+            <strong>Esta empresa possui assessoria?</strong>
+
+            <small>
+              Ative para informar as datas e a periodicidade.
+            </small>
+          </span>
+
+        </label>
+
+        <div id="campo_assessoria" class="campos-assessoria" style="display: none;">
+
+          <div class="grade-campos">
+
+            <div class="campo">
+              <label for="data_inicio_assessoria">
+                Início da assessoria
+              </label>
+
+              <input type="date" id="data_inicio_assessoria" name="data_inicio_assessoria">
+            </div>
+
+            <div class="campo">
+              <label for="periodicidade_assessoria">
+                Periodicidade
+              </label>
+
+              <select id="periodicidade_assessoria" name="periodicidade_assessoria">
+                <option value="">
+                  Selecione a periodicidade
+                </option>
+
+                <option value="1">Mensal</option>
+                <option value="2">Bimestral</option>
+                <option value="3">Trimestral</option>
+                <option value="4">Quadrimestral</option>
+                <option value="6">Semestral</option>
+              </select>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- AÇÕES -->
+
+      <footer class="acoes-formulario">
+
+        <p>
+          Os campos com * são obrigatórios.
+        </p>
+
+        <button type="submit" class="botao-cadastrar">
+          Cadastrar empresa
+          <span aria-hidden="true">→</span>
+        </button>
+
+      </footer>
+
+    </form>
+
+  </main>
+
+  <script src="{{ url_for('static', filename='js/cadastrar.js') }}"></script>
+
+</body>
+
+</html>

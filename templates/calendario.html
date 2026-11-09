@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Agenda de Visitas | Gestão SST</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/calendario.css') }}">
+
+  <script src="{{ url_for('static', filename='js/calendario.js') }}" defer></script>
+</head>
+
+<body>
+  <main class="container">
+
+    <header class="topo">
+
+      <div class="marca">
+        <div class="marca-icone">✦</div>
+
+        <div>
+          <h1>Gestão de Visitas</h1>
+          <p>Planejamento de atendimentos técnicos</p>
+        </div>
+      </div>
+
+      <a href="/" class="botao">
+        ← Voltar ao painel
+      </a>
+
+    </header>
+
+    <section class="introducao">
+
+      <div class="sobretitulo">
+        <span class="indicador"></span>
+        Bora
+      </div>
+
+      <h2>
+        Minhas visitas.<br>
+        <span>:)</span>
+      </h2>
+
+    </section>
+
+    <!-- Painel -->
+
+    <section class="painel">
+
+      <header class="painel-topo">
+
+        <div>
+          <div class="rotulo">Período selecionado</div>
+
+          <h2 class="mes-titulo">
+            {{ nome_mes }}
+            <span>{{ ano }}</span>
+          </h2>
+        </div>
+
+        <nav class="navegacao">
+
+          <a class="botao" href="{{ url_for(
+                        'calendario',
+                        mes=12 if mes == 1 else mes - 1,
+                        ano=ano - 1 if mes == 1 else ano
+                    ) }}">
+            ← Anterior
+          </a>
+
+          <a class="botao botao-azul" href="{{ url_for('calendario') }}">
+            Mês atual
+          </a>
+
+          <a class="botao" href="{{ url_for(
+                        'calendario',
+                        mes=1 if mes == 12 else mes + 1,
+                        ano=ano + 1 if mes == 12 else ano
+                    ) }}">
+            Próximo →
+          </a>
+
+        </nav>
+
+      </header>
+
+      <!-- Resumo do período -->
+
+      <section class="resumo">
+
+        <article class="resumo-item" style="
+                    --cor-fundo: rgba(96,165,250,.12);
+                    --cor-texto: #60a5fa;
+                    --cor-brilho: #60a5fa;
+                ">
+
+          <div class="resumo-icone">▦</div>
+
+          <div class="resumo-numero">
+            {{ visitas|length }}
+          </div>
+
+          <div class="resumo-descricao">
+            Visitas previstas no período
+          </div>
+
+        </article>
+
+        <article class="resumo-item" style="
+                    --cor-fundo: rgba(52,211,153,.12);
+                    --cor-texto: #34d399;
+                    --cor-brilho: #34d399;
+                ">
+
+          <div class="resumo-icone">✓</div>
+
+          <div class="resumo-numero" id="contador-realizadas" aria-live="polite">
+
+            {{ visitas | selectattr('realizada') | list | length }}
+
+          </div>
+
+          <div class="resumo-descricao">
+            Visitas realizadas
+          </div>
+
+        </article>
+
+        <article class="resumo-item" style="
+                    --cor-fundo: rgba(167,139,250,.12);
+                    --cor-texto: #a78bfa;
+                    --cor-brilho: #a78bfa;
+                ">
+
+          <div class="resumo-icone">◷</div>
+
+          <div class="resumo-numero">
+            {{ nome_mes[:3] }}
+          </div>
+
+          <div class="resumo-descricao">
+            Mês de referência
+          </div>
+
+        </article>
+
+      </section>
+
+      <!-- Empresas previstas -->
+
+      <div class="lista-cabecalho">
+
+        <div>
+          <h3>Programação de visitas</h3>
+          <p>Empresas previstas para atendimento neste mês.</p>
+        </div>
+
+        <span class="quantidade">
+          {{ visitas|length }}
+        </span>
+
+      </div>
+
+      {% if visitas %}
+
+      <section class="lista">
+
+        {% for visita in visitas %}
+
+        <article class="empresa {% if visita.realizada %}visita-realizada{% endif %}" data-visita-item>
+
+          <div class="empresa-icone">⌂</div>
+
+          <div class="empresa-conteudo">
+
+            <!-- Situação da visita -->
+
+            <span class="empresa-status" data-visita-status>
+
+              {% if visita.realizada %}
+              ✓ Visita realizada
+              {% else %}
+              ● Visita prevista
+              {% endif %}
+
+            </span>
+
+            <h4>
+              {{ visita.nome }}
+            </h4>
+
+            <div class="empresa-data">
+              <span>▦</span>
+
+              <span>
+                {{ visita.data.strftime('%d/%m/%Y') }}
+              </span>
+            </div>
+
+            <!-- Botão de conclusão -->
+
+            <button type="button" class="botao-visita" data-visita-botao data-empresa-id="{{ visita.id }}"
+              data-data-visita="{{ visita.data.isoformat() }}" data-url="{{ url_for('alternar_visita') }}"
+              aria-pressed="{{ 'true' if visita.realizada else 'false' }}">
+
+              <span data-visita-icone>
+                {{ '✓' if visita.realizada else '○' }}
+              </span>
+
+              <span data-visita-texto>
+                {{ 'Desfazer conclusão' if visita.realizada else 'Marcar visita realizada' }}
+              </span>
+
+            </button>
+
+          </div>
+
+        </article>
+
+        {% endfor %}
+
+      </section>
+
+      {% else %}
+
+      <!-- Estado vazio -->
+
+      <section class="vazio">
+
+        <div class="vazio-icone">◷</div>
+
+        <h3>Nenhuma visita programada</h3>
+
+        <p>
+          Não há visitas previstas para
+          {{ nome_mes }} de {{ ano }}.
+          Você pode consultar outros meses usando
+          os controles de navegação acima.
+        </p>
+
+      </section>
+
+      {% endif %}
+
+    </section>
+
+    <footer class="rodape">
+
+      <span>Gestão SST · Planejamento de visitas</span>
+
+      <span>Período: {{ nome_mes }} de {{ ano }}</span>
+
+    </footer>
+
+  </main>
+</body>
+
+</html>

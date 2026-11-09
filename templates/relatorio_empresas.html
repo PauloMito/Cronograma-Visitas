@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatório Geral de Empresas | Prestolabor</title>
+  <link rel="stylesheet" href="..//static/css/relatorio_empresas.css">
+</head>
+
+<body>
+
+  {% set periodicidades = {
+  1: "Mensal",
+  2: "Bimestral",
+  3: "Trimestral",
+  4: "Quadrimestral",
+  6: "Semestral"
+  } %}
+
+  {% set indicadores = namespace(
+  total=0,
+  com_assessoria=0,
+  sem_assessoria=0
+  ) %}
+
+  {% for empresa in empresas %}
+  {% set indicadores.total = indicadores.total + 1 %}
+
+  {% if empresa[7] %}
+  {% set indicadores.com_assessoria = indicadores.com_assessoria + 1 %}
+  {% else %}
+  {% set indicadores.sem_assessoria = indicadores.sem_assessoria + 1 %}
+  {% endif %}
+  {% endfor %}
+
+  <main class="report-container">
+
+    <!-- CABEÇALHO -->
+
+    <header class="report-header">
+
+      <div>
+        <div class="brand">PRESTOLABOR</div>
+        <div class="brand-subtitle">
+          SAÚDE E SEGURANÇA NO TRABALHO
+        </div>
+      </div>
+
+      <div class="report-title">
+        <h1>RELATÓRIO GERAL DE EMPRESAS</h1>
+        <p>Data de emissão: {{ data_emissao }}</p>
+      </div>
+
+    </header>
+
+
+    <!-- INDICADORES -->
+
+    <section class="indicators">
+
+      <div class="indicator">
+        <div class="indicator-label">Total de empresas</div>
+        <div class="indicator-value">
+          {{ indicadores.total }}
+        </div>
+      </div>
+
+      <div class="indicator">
+        <div class="indicator-label">Com assessoria</div>
+        <div class="indicator-value">
+          {{ indicadores.com_assessoria }}
+        </div>
+      </div>
+
+      <div class="indicator">
+        <div class="indicator-label">Sem assessoria</div>
+        <div class="indicator-value">
+          {{ indicadores.sem_assessoria }}
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- IDENTIFICAÇÃO DAS EMPRESAS -->
+
+    <section class="report-section">
+
+      <h2>Identificação e qualificação empresarial</h2>
+
+      <table class="report-table">
+
+        <thead>
+          <tr>
+            <th>Empresa</th>
+            <th>Tipo de inscrição</th>
+            <th>Número de inscrição</th>
+            <th>Endereço</th>
+            <th>Cidade</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          {% for empresa in empresas %}
+
+          <tr>
+            <td><strong>{{ empresa[1] }}</strong></td>
+            <td>{{ empresa[2] or "Não informado" }}</td>
+            <td>{{ empresa[3] or "Não informado" }}</td>
+            <td>{{ empresa[4] or "Não informado" }}</td>
+            <td>{{ empresa[5] or "Não informado" }}</td>
+          </tr>
+
+          {% else %}
+
+          <tr>
+            <td colspan="5" class="sem-dado">
+              Nenhuma empresa cadastrada.
+            </td>
+          </tr>
+
+          {% endfor %}
+
+        </tbody>
+
+      </table>
+
+    </section>
+
+
+    <!-- INFORMAÇÕES DA ASSESSORIA -->
+
+    <section class="report-section">
+
+      <h2>Informações da assessoria</h2>
+
+      <table class="report-table">
+
+        <thead>
+          <tr>
+            <th>Empresa</th>
+            <th>Possui assessoria?</th>
+            <th>Periodicidade</th>
+            <th>Início da assessoria</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          {% for empresa in empresas %}
+
+          <tr>
+            <td><strong>{{ empresa[1] }}</strong></td>
+
+            <td>
+              {% if empresa[7] %}
+              Sim
+              {% else %}
+              Não
+              {% endif %}
+            </td>
+
+            <td>
+              {% if empresa[7] %}
+              {{ periodicidades.get(empresa[8], "Não informado") }}
+              {% else %}
+              <span class="sem-dado">Não se aplica</span>
+              {% endif %}
+            </td>
+
+            <td>
+              {% if empresa[9] %}
+              {{ empresa[9][8:10] }}/{{ empresa[9][5:7] }}/{{ empresa[9][0:4] }}
+              {% else %}
+              <span class="sem-dado">Não informado</span>
+              {% endif %}
+            </td>
+          </tr>
+
+          {% else %}
+
+          <tr>
+            <td colspan="4" class="sem-dado">
+              Nenhuma empresa cadastrada.
+            </td>
+          </tr>
+
+          {% endfor %}
+
+        </tbody>
+
+      </table>
+
+    </section>
+
+
+    <!-- Vencimento -->
+
+    <section class="report-section">
+
+      <h2>Vencimento dos documentos - Carteira Paulo</h2>
+
+      {% set meses = [
+      "Janeiro",
+      "Fevereiro",
+      "Março",
+      "Abril",
+      "Maio",
+      "Junho",
+      "Julho",
+      "Agosto",
+      "Setembro",
+      "Outubro",
+      "Novembro",
+      "Dezembro"
+      ] %}
+
+      {% set controle = namespace(total=0) %}
+
+      {% for numero_mes in range(1, 13) %}
+
+      {% set empresas_mes = namespace(lista=[]) %}
+
+      {% for empresa in empresas %}
+
+      {% set datas = datas_documentos.get(empresa[0], {}) %}
+
+      {% if datas.get("vencimento") and datas.vencimento.month == numero_mes %}
+
+      {% set empresas_mes.lista = empresas_mes.lista + [empresa] %}
+
+      {% endif %}
+
+      {% endfor %}
+
+      {% if empresas_mes.lista %}
+
+      {% set controle.total = controle.total + empresas_mes.lista|length %}
+
+      <div class="mes-vencimento">
+
+        <h3>{{ meses[numero_mes - 1] }}</h3>
+
+        <ul>
+
+          {% for empresa in empresas_mes.lista %}
+
+          <li>{{ empresa[1] }}</li>
+
+          {% endfor %}
+
+        </ul>
+
+      </div>
+
+      {% endif %}
+
+      {% endfor %}
+
+      {% if controle.total == 0 %}
+
+      <p class="sem-vencimentos">
+        Nenhum vencimento de documento calculado.
+      </p>
+
+      {% endif %}
+
+    </section>
+
+
+    <!-- ANOTAÇÕES -->
+
+    <section class="report-section">
+
+      <h2>Anotações</h2>
+
+      <table class="report-table">
+
+        <thead>
+          <tr>
+            <th>Empresa</th>
+            <th>Anotações</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          {% for empresa in empresas %}
+
+          <tr>
+            <td><strong>{{ empresa[1] }}</strong></td>
+
+            <td class="anotacoes">
+              {% if empresa[6] %}
+              {{ empresa[6] }}
+              {% else %}
+              <span class="sem-dado">Nenhuma anotação registrada.</span>
+              {% endif %}
+            </td>
+          </tr>
+
+          {% else %}
+
+          <tr>
+            <td colspan="2" class="sem-dado">
+              Nenhuma empresa cadastrada.
+            </td>
+          </tr>
+
+          {% endfor %}
+
+        </tbody>
+
+      </table>
+
+    </section>
+
+
+    <!-- RODAPÉ -->
+
+    <footer class="report-footer">
+
+      <span>PRESTOLABOR - Saúde e Segurança no Trabalho</span>
+
+      <span>Relatório gerado em {{ data_emissao }}</span>
+
+    </footer>
+
+  </main>
+
+
+  <!-- AÇÕES -->
+
+  <div class="report-actions">
+
+    <a href="/" class="btn btn-back">
+      Voltar
+    </a>
+
+    <button type="button" class="btn btn-print" onclick="window.print()">
+      Imprimir / Salvar PDF
+    </button>
+
+  </div>
+
+</body>
+
+</html>

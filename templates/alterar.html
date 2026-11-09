@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Alterar Empresa | Rolabor</title>
+
+  <style>
+    :root {
+      --cor-principal: #2457a7;
+      --cor-principal-hover: #194582;
+      --cor-fundo: #f3f5f8;
+      --cor-borda: #d8dee8;
+      --cor-texto: #243044;
+      --cor-secundaria: #64748b;
+      --cor-branco: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 32px 16px;
+      background: var(--cor-fundo);
+      color: var(--cor-texto);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    .cabecalho {
+      margin-bottom: 24px;
+    }
+
+    .cabecalho h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+    }
+
+    .cabecalho p {
+      margin: 0;
+      color: var(--cor-secundaria);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .formulario {
+      padding: 28px;
+      background: var(--cor-branco);
+      border: 1px solid var(--cor-borda);
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(30, 41, 59, 0.05);
+    }
+
+    .secao {
+      margin-bottom: 28px;
+    }
+
+    .secao:last-of-type {
+      margin-bottom: 0;
+    }
+
+    .secao h2 {
+      margin: 0 0 6px;
+      font-size: 17px;
+    }
+
+    .descricao-secao {
+      margin: 0 0 20px;
+      color: var(--cor-secundaria);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .grade {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .campo {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    .campo-completo {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--cor-borda);
+      border-radius: 7px;
+      background: #fff;
+      color: var(--cor-texto);
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--cor-principal);
+      box-shadow: 0 0 0 3px rgba(36, 87, 167, 0.12);
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    .ajuda {
+      color: var(--cor-secundaria);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .separador {
+      height: 1px;
+      margin: 28px 0;
+      background: #e8edf3;
+    }
+
+    .opcao-assessoria {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px;
+      border: 1px solid var(--cor-borda);
+      border-radius: 8px;
+      background: #fafbfd;
+      cursor: pointer;
+    }
+
+    .opcao-assessoria input {
+      width: 17px;
+      height: 17px;
+      margin: 0;
+      accent-color: var(--cor-principal);
+      cursor: pointer;
+    }
+
+    .opcao-assessoria span {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    #campo_assessoria {
+      margin-top: 18px;
+      padding: 18px;
+      border: 1px solid var(--cor-borda);
+      border-radius: 8px;
+      background: #fafbfd;
+    }
+
+    .acoes {
+      display: flex;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+      padding-top: 22px;
+      border-top: 1px solid #e8edf3;
+    }
+
+    .botao {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 11px 18px;
+      border: 1px solid transparent;
+      border-radius: 7px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .botao-principal {
+      background: var(--cor-principal);
+      color: #fff;
+    }
+
+    .botao-principal:hover {
+      background: var(--cor-principal-hover);
+    }
+
+    .botao-secundario {
+      border-color: var(--cor-borda);
+      background: #fff;
+      color: var(--cor-texto);
+    }
+
+    .botao-secundario:hover {
+      background: #f1f5f9;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 20px 12px;
+      }
+
+      .cabecalho h1 {
+        font-size: 23px;
+      }
+
+      .formulario {
+        padding: 20px 16px;
+      }
+
+      .grade {
+        grid-template-columns: 1fr;
+      }
+
+      .campo-completo {
+        grid-column: auto;
+      }
+
+      .acoes {
+        flex-direction: column-reverse;
+      }
+
+      .botao {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="container">
+
+    <header class="cabecalho">
+      <h1>Alterar empresa</h1>
+      <p>Atualize os dados cadastrais e as informações de assessoria.</p>
+    </header>
+
+    <form method="POST" class="formulario">
+
+      <!-- DADOS CADASTRAIS -->
+
+      <section class="secao">
+        <h2>Dados cadastrais</h2>
+        <p class="descricao-secao">
+          Informações de identificação e localização da empresa.
+        </p>
+
+        <div class="grade">
+
+          <div class="campo campo-completo">
+            <label for="nome">Nome da empresa</label>
+            <input type="text" id="nome" name="nome" value="{{ empresa[1] or '' }}" placeholder="Nome da empresa"
+              required>
+          </div>
+
+          <div class="campo">
+            <label for="tipo_inscricao">Tipo de inscrição</label>
+
+            <select id="tipo_inscricao" name="tipo_inscricao" required>
+              <option value="CNPJ" {% if empresa[2]=="CNPJ" %}selected{% endif %}>
+                CNPJ
+              </option>
+
+              <option value="CAEPF" {% if empresa[2]=="CAEPF" %}selected{% endif %}>
+                CAEPF
+              </option>
+            </select>
+          </div>
+
+          <div class="campo">
+            <label for="numero_inscricao" id="label_numero_inscricao">
+              Número do CNPJ
+            </label>
+
+            <input type="text" id="numero_inscricao" name="numero_inscricao" value="{{ empresa[3] or '' }}"
+              placeholder="00.000.000/0000-00" maxlength="18" inputmode="numeric" autocomplete="off" required>
+
+            <span class="ajuda" id="ajuda_inscricao">
+              Informe o número da inscrição.
+            </span>
+          </div>
+
+          <div class="campo campo-completo">
+            <label for="endereco">Endereço</label>
+            <input type="text" id="endereco" name="endereco" value="{{ empresa[4] or '' }}"
+              placeholder="Rua, número e complemento">
+          </div>
+
+          <div class="campo campo-completo">
+            <label for="cidade">Cidade</label>
+            <input type="text" id="cidade" name="cidade" value="{{ empresa[5] or '' }}" placeholder="Cidade da empresa">
+          </div>
+
+          <div class="campo campo-completo">
+            <label for="anotacoes">Anotações</label>
+            <textarea id="anotacoes" name="anotacoes"
+              placeholder="Observações relevantes sobre a empresa">{{ empresa[6] or '' }}</textarea>
+          </div>
+
+          <div class="campo campo-completo">
+            <label for="data_documento">Data do documento</label>
+            <input type="date" id="data_documento" name="data_documento" value="{{ empresa[10] or '' }}">
+            <span class="ajuda">
+              Data de referência do documento, quando aplicável.
+            </span>
+          </div>
+
+        </div>
+      </section>
+
+      <div class="separador"></div>
+
+      <!-- ASSESSORIA -->
+
+      <section class="secao">
+        <h2>Assessoria</h2>
+        <p class="descricao-secao">
+          Configure a periodicidade e a data de início do atendimento.
+        </p>
+
+        <label class="opcao-assessoria" for="possui_assessoria">
+          <input type="checkbox" id="possui_assessoria" name="possui_assessoria" value="1" {% if empresa[7]==1
+            %}checked{% endif %}>
+          <span>Esta empresa possui assessoria?</span>
+        </label>
+
+        <div id="campo_assessoria" {% if empresa[7] !=1 %}hidden{% endif %}>
+
+          <div class="grade">
+
+            <div class="campo">
+              <label for="data_inicio_assessoria">
+                Data de início da assessoria
+              </label>
+
+              <input type="date" id="data_inicio_assessoria" name="data_inicio_assessoria"
+                value="{{ empresa[9] or '' }}">
+            </div>
+
+            <div class="campo">
+              <label for="periodicidade_assessoria">
+                Periodicidade da assessoria
+              </label>
+
+              <select id="periodicidade_assessoria" name="periodicidade_assessoria">
+                <option value="">
+                  Selecione uma periodicidade
+                </option>
+
+                <option value="1" {% if empresa[8]==1 %}selected{% endif %}>
+                  Mensal
+                </option>
+
+                <option value="2" {% if empresa[8]==2 %}selected{% endif %}>
+                  Bimestral
+                </option>
+
+                <option value="3" {% if empresa[8]==3 %}selected{% endif %}>
+                  Trimestral
+                </option>
+
+                <option value="4" {% if empresa[8]==4 %}selected{% endif %}>
+                  Quadrimestral
+                </option>
+
+                <option value="6" {% if empresa[8]==6 %}selected{% endif %}>
+                  Semestral
+                </option>
+              </select>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- AÇÕES -->
+
+      <div class="acoes">
+        <a href="/" class="botao botao-secundario">
+          Cancelar
+        </a>
+
+        <button type="submit" class="botao botao-principal">
+          Salvar alterações
+        </button>
+      </div>
+
+    </form>
+  </main>
+
+  <script>
+    // Elementos da inscrição
+    const tipoInscricao = document.getElementById("tipo_inscricao");
+    const numeroInscricao = document.getElementById("numero_inscricao");
+    const labelNumeroInscricao = document.getElementById("label_numero_inscricao");
+    const ajudaInscricao = document.getElementById("ajuda_inscricao");
+
+    // Elementos da assessoria
+    const possuiAssessoria = document.getElementById("possui_assessoria");
+    const campoAssessoria = document.getElementById("campo_assessoria");
+    const dataInicio = document.getElementById("data_inicio_assessoria");
+    const periodicidade = document.getElementById("periodicidade_assessoria");
+
+
+    // Formata CNPJ ou CAEPF conforme o tipo selecionado
+    function formatarInscricao(valor, tipo) {
+      const digitos = valor.replace(/\D/g, "").slice(0, 14);
+
+      const mascara = tipo === "CAEPF"
+        ? "000.000.000/000-00"
+        : "00.000.000/0000-00";
+
+      let resultado = "";
+      let indice = 0;
+
+      for (const caractere of mascara) {
+        if (caractere === "0") {
+          if (indice >= digitos.length) {
+            break;
+          }
+
+          resultado += digitos[indice];
+          indice++;
+        } else {
+          if (indice >= digitos.length) {
+            break;
+          }
+
+          resultado += caractere;
+        }
+      }
+
+      return resultado;
+    }
+
+
+    // Atualiza rótulos e formatação da inscrição
+    function atualizarTipoInscricao() {
+      const tipo = tipoInscricao.value;
+
+      if (tipo === "CAEPF") {
+        labelNumeroInscricao.textContent = "Número do CAEPF";
+        numeroInscricao.placeholder = "000.000.000/000-00";
+        ajudaInscricao.textContent = "Informe o número do CAEPF.";
+      } else {
+        labelNumeroInscricao.textContent = "Número do CNPJ";
+        numeroInscricao.placeholder = "00.000.000/0000-00";
+        ajudaInscricao.textContent = "Informe o número do CNPJ.";
+      }
+
+      numeroInscricao.value = formatarInscricao(
+        numeroInscricao.value,
+        tipo
+      );
+    }
+
+
+    numeroInscricao.addEventListener("input", function () {
+      this.value = formatarInscricao(
+        this.value,
+        tipoInscricao.value
+      );
+    });
+
+    tipoInscricao.addEventListener("change", atualizarTipoInscricao);
+
+
+    // Mostra ou oculta os campos de assessoria
+    function atualizarAssessoria() {
+      const ativa = possuiAssessoria.checked;
+
+      campoAssessoria.hidden = !ativa;
+
+      dataInicio.required = ativa;
+      periodicidade.required = ativa;
+
+      if (!ativa) {
+        dataInicio.value = "";
+        periodicidade.value = "";
+      }
+    }
+
+    possuiAssessoria.addEventListener("change", atualizarAssessoria);
+
+
+    // Inicializa os campos de acordo com os dados carregados
+    atualizarTipoInscricao();
+
+    // Não limpa os valores existentes ao carregar a página.
+    campoAssessoria.hidden = !possuiAssessoria.checked;
+
+    dataInicio.required = possuiAssessoria.checked;
+    periodicidade.required = possuiAssessoria.checked;
+  </script>
+
+</body>
+
+</html>

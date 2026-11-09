@@ -1,0 +1,20 @@
+﻿# Banco de dados
+*.db
+*.sqlite
+*.sqlite3
+
+# Ambientes virtuais
+venv/
+.venv/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Variáveis de ambiente e segredos
+.env
+.env.*
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db

@@ -1,0 +1,469 @@
+:root {--fundo: #0b1120;
+  --painel: #131d30;
+  --painel-hover: #1a2940;
+  --borda: rgba(148, 163, 184, 0.15);
+  --texto: #f1f5f9;
+  --secundario: #94a3b8;
+  --azul: #60a5fa;
+  --verde: #34d399;
+  --roxo: #a78bfa;
+    }
+    
+* {box-sizing: border-box;}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+  radial-gradient(circle at 90% 0%,
+  rgba(37, 99, 235, 0.16),
+  transparent 32%),
+  var(--fundo);
+  color: var(--texto);
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+a {color: inherit; text-decoration: none;}
+
+button {font: inherit;}
+
+.container {width: min(1180px, calc(100% - 36px)); margin: 0 auto; padding: 36px 0 60px;}
+
+.topo {display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 36px;}
+
+.marca {display: flex; align-items: center; gap: 14px;}
+
+.marca-icone {display: grid; place-items: center; width: 52px; height: 52px; border: 1px solid rgba(96, 165, 250, 0.3);
+  border-radius: 16px; background: rgba(37, 99, 235, 0.15); color: var(--azul); font-size: 25px;}
+
+.marca h1 {margin: 0;font-size: 23px;letter-spacing: -0.7px; }
+
+.marca p {margin: 6px 0 0; color: var(--secundario); font-size: 13px;}
+
+.botao {display: inline-flex; justify-content: center; align-items: center; gap: 8px; padding: 11px 15px; border: 1px solid var(--borda);
+      border-radius: 11px;
+      background: var(--painel);
+      color: var(--texto);
+      font-size: 13px;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+
+.botao:hover {background: var(--painel-hover); border-color: rgba(96, 165, 250, 0.5); transform: translateY(-1px);}
+
+.botao-azul {border-color: transparent; background: #2563eb; color: white;}
+
+.botao-azul:hover {background: #3b82f6;}
+
+.introducao {margin-bottom: 28px;}
+
+.sobretitulo {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      color: var(--verde);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+.indicador {
+  width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--verde);
+      box-shadow: 0 0 12px rgba(52, 211, 153, 0.7);
+    }
+
+.introducao h2 {
+      margin: 0;
+      font-size: clamp(30px, 5vw, 44px);
+      letter-spacing: -1.8px;
+      line-height: 1.15;
+    }
+
+.introducao h2 span {color: var(--azul);}
+
+    .introducao p {
+      max-width: 620px;
+      margin: 14px 0 0;
+      color: var(--secundario);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    /* Painel principal */
+
+    .painel {
+      overflow: hidden;
+      border: 1px solid var(--borda);
+      border-radius: 22px;
+      background: rgba(19, 29, 48, 0.92);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.2);
+    }
+
+    .painel-topo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      padding: 26px 28px;
+      border-bottom: 1px solid var(--borda);
+    }
+
+    .rotulo {
+      margin-bottom: 8px;
+      color: var(--secundario);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .mes-titulo {
+      margin: 0;
+      font-size: clamp(24px, 4vw, 34px);
+      letter-spacing: -1px;
+    }
+
+    .mes-titulo span {
+      color: var(--azul);
+    }
+
+    .navegacao {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    /* Resumo */
+
+    .resumo {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      padding: 24px 28px;
+      border-bottom: 1px solid var(--borda);
+    }
+
+    .resumo-item {
+      position: relative;
+      overflow: hidden;
+      min-height: 120px;
+      padding: 20px;
+      border: 1px solid var(--borda);
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    .resumo-item::after {
+      position: absolute;
+      right: -20px;
+      bottom: -32px;
+      width: 95px;
+      height: 95px;
+      border-radius: 50%;
+      background: var(--cor-brilho);
+      opacity: 0.08;
+      content: "";
+    }
+
+    .resumo-icone {
+      display: grid;
+      place-items: center;
+      width: 35px;
+      height: 35px;
+      margin-bottom: 17px;
+      border-radius: 10px;
+      background: var(--cor-fundo);
+      color: var(--cor-texto);
+      font-size: 17px;
+    }
+
+    .resumo-numero {
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .resumo-descricao {
+      margin-top: 6px;
+      color: var(--secundario);
+      font-size: 12px;
+    }
+
+    /* Lista de visitas */
+
+    .lista-cabecalho {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      padding: 27px 28px 20px;
+    }
+
+    .lista-cabecalho h3 {
+      margin: 0;
+      font-size: 19px;
+    }
+
+    .lista-cabecalho p {
+      margin: 7px 0 0;
+      color: var(--secundario);
+      font-size: 12px;
+    }
+
+    .quantidade {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 34px;
+      height: 34px;
+      padding: 0 10px;
+      border: 1px solid rgba(96, 165, 250, 0.2);
+      border-radius: 10px;
+      background: rgba(37, 99, 235, 0.12);
+      color: var(--azul);
+      font-weight: 800;
+    }
+
+    .lista {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      padding: 0 28px 28px;
+    }
+
+    .empresa {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      min-width: 0;
+      padding: 19px;
+      border: 1px solid var(--borda);
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.025);
+      transition: 0.2s;
+    }
+
+    .empresa:hover {
+      border-color: rgba(96, 165, 250, 0.35);
+      background: var(--painel-hover);
+      transform: translateY(-2px);
+    }
+
+    .empresa-icone {
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      width: 46px;
+      height: 46px;
+      border: 1px solid rgba(96, 165, 250, 0.2);
+      border-radius: 13px;
+      background: rgba(37, 99, 235, 0.12);
+      color: var(--azul);
+      font-size: 20px;
+    }
+
+    .empresa-conteudo {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .empresa-status {
+      display: inline-block;
+      margin-bottom: 9px;
+      color: var(--verde);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .empresa h4 {
+      margin: 0;
+      overflow-wrap: anywhere;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .empresa-data {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 12px;
+      color: var(--secundario);
+      font-size: 12px;
+    }
+
+    /* Estado vazio */
+
+    .vazio {
+      margin: 0 28px 28px;
+      padding: 45px 20px;
+      border: 1px dashed rgba(148, 163, 184, 0.25);
+      border-radius: 16px;
+      text-align: center;
+    }
+
+    .vazio-icone {
+      display: grid;
+      place-items: center;
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 18px;
+      border: 1px solid var(--borda);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.035);
+      font-size: 27px;
+    }
+
+    .vazio h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .vazio p {
+      margin: 10px auto 0;
+      max-width: 380px;
+      color: var(--secundario);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .rodape {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+      color: var(--secundario);
+      font-size: 11px;
+    }
+
+    /* Responsividade */
+
+    @media (max-width: 720px) {
+      .container {
+        width: calc(100% - 24px);
+        padding-top: 22px;
+      }
+
+      .topo {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .painel-topo {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 22px 18px;
+      }
+
+      .navegacao {
+        justify-content: flex-start;
+      }
+
+      .resumo {
+        grid-template-columns: 1fr;
+        padding: 18px;
+      }
+
+      .resumo-item {
+        min-height: auto;
+        padding: 16px;
+      }
+
+      .resumo-icone {
+        margin-bottom: 10px;
+      }
+
+      .lista-cabecalho {
+        padding: 22px 18px 18px;
+      }
+
+      .lista {
+        grid-template-columns: 1fr;
+        padding: 0 18px 18px;
+      }
+
+      .vazio {
+        margin: 0 18px 18px;
+      }
+
+      .introducao h2 {
+        letter-spacing: -1px;
+      }
+
+      .rodape {
+        line-height: 1.6;
+      }
+    }
+
+.botao-visita {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 14px;
+    padding: 9px 13px;
+    border: 1px solid #475569;
+    border-radius: 8px;
+    background-color: #1e293b;
+    color: #e2e8f0;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.botao-visita:hover {
+    background-color: #334155;
+}
+
+.botao-visita:focus-visible {outline: 2px solid #60a5fa; outline-offset: 3px;}
+
+.empresa.visita-realizada {
+    border-color: #34d399;
+    background-color: rgba(52, 211, 153, 0.09);
+}
+
+/* Status da visita concluída */
+
+.empresa.visita-realizada .empresa-status {
+    color: #34d399;
+}
+
+/* Botão no estado concluído */
+
+.empresa.visita-realizada .botao-visita {
+    background-color: rgba(52, 211, 153, 0.12);
+    border-color: #34d399;
+    color: #34d399;
+}
+
+.empresa.visita-realizada .botao-visita:hover {background-color: rgba(9, 1, 222, 0.383);}
+
+@media (prefers-reduced-motion: reduce) {
+    .botao-visita {
+        transition: none;
+    }
+}
+
+.empresa.visita-realizada {
+    border-color: #b3d334;
+    background: rgba(168, 231, 8, 0.429);
+}
+
+.empresa.visita-realizada .empresa-status {color: #9dcbc8;}
+
+.botao-visita:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
