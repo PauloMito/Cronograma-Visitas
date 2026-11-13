@@ -774,8 +774,49 @@ def documentos():
 @app.route("/relatorios/empresas")
 def relatorio_empresas():
     empresas = buscar_empresas()
+
     datas_documentos = preparar_datas_documentos(empresas)
-    return render_template("relatorio_empresas.html", empresas=empresas, datas_documentos=datas_documentos, data_emissao=date.today().strftime("%d/%m/%Y"))
+
+    # Organiza somente empresas que possuem assessoria.
+    empresas_por_cidade = {}
+
+    for empresa in empresas:
+
+        possui_assessoria = empresa[7]
+
+        if possui_assessoria != 1:
+            continue
+
+        cidade = empresa[5] or "Cidade não informada"
+        cidade = cidade.strip()
+
+        if not cidade:
+            cidade = "Cidade não informada"
+
+        # Usa a cidade como chave de agrupamento.
+        chave_cidade = cidade.casefold()
+
+        if chave_cidade not in empresas_por_cidade:
+            empresas_por_cidade[chave_cidade] = {
+                "cidade": cidade,
+                "empresas": []
+            }
+
+        empresas_por_cidade[chave_cidade]["empresas"].append(empresa)
+
+    # Transforma o dicionário em uma lista ordenada.
+    assessoria_por_cidade = sorted(
+        empresas_por_cidade.values(),
+        key=lambda item: item["cidade"].casefold()
+    )
+
+    return render_template(
+        "relatorio_empresas.html",
+        empresas=empresas,
+        datas_documentos=datas_documentos,
+        assessoria_por_cidade=assessoria_por_cidade,
+        data_emissao=date.today().strftime("%d/%m/%Y")
+    )
 
 @app.route("/visitas/alternar", methods=["POST"])
 def alternar_visita():
